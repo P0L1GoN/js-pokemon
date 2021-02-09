@@ -21,6 +21,17 @@ let pokemon={
         this.damage=getRandom(10,50)
     }
 }
+let counterClick=()=>{
+    let counter=0
+    return ()=>{
+        alert(`Осталось ${6-counter} нажатий`)
+        if(counter<6)
+            counter++
+        else
+            return 0
+    }
+}
+let CC=counterClick()
 let Pikachu={},Charmander={}
 Object.assign(Pikachu,pokemon)
 Object.assign(Charmander,pokemon)
@@ -37,6 +48,8 @@ let healthRender=()=>{
     healthEn.innerHTML=`${Charmander.damageHP} / ${Charmander.defaultHP}`
 }
 kick.onclick=()=>{
+    if(CC()===0)
+        return 0
     Pikachu.damageHP-=Charmander.damage
     Charmander.damageHP-=Pikachu.damage
     healthRender()
