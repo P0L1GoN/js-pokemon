@@ -1,79 +1,103 @@
-let kick=document.querySelector("#btn-kick")
+import {pokemons} from './pokemons.js'
 const logs = [
-    'Pikachu вспомнил что-то важное, но неожиданно Charmander, не помня себя от испуга, ударил в предплечье врага.',
-    'Pikachu поперхнулся, и за это Charmander с испугу приложил прямой удар коленом в лоб врага.',
-    'Pikachu забылся, но в это время наглый Charmander, приняв волевое решение, неслышно подойдя сзади, ударил.',
-    'Pikachu пришел в себя, но неожиданно Charmander случайно нанес мощнейший удар.',
-    'Pikachu поперхнулся, но в это время Charmander нехотя раздробил кулаком \<вырезанно цензурой\> противника.',
-    'Pikachu удивился, а Charmander пошатнувшись влепил подлый удар.',
-    'Pikachu высморкался, но неожиданно Charmander провел дробящий удар.',
-    'Pikachu пошатнулся, и внезапно наглый Charmander беспричинно ударил в ногу противника',
-    'Pikachu расстроился, как вдруг, неожиданно Charmander случайно влепил стопой в живот соперника.',
-    'Pikachu пытался что-то сказать, но вдруг, неожиданно Charmander со скуки, разбил бровь сопернику.'
+    'player1 вспомнил что-то важное, но неожиданно player2, не помня себя от испуга, ударил в предплечье врага.',
+    'player1 поперхнулся, и за это player2 с испугу приложил прямой удар коленом в лоб врага.',
+    'player1 забылся, но в это время наглый player2, приняв волевое решение, неслышно подойдя сзади, ударил.',
+    'player1 пришел в себя, но неожиданно player2 случайно нанес мощнейший удар.',
+    'player1 поперхнулся, но в это время player2 нехотя раздробил кулаком \<вырезанно цензурой\> противника.',
+    'player1 удивился, а player2 пошатнувшись влепил подлый удар.',
+    'player1 высморкался, но неожиданно player2 провел дробящий удар.',
+    'player1 пошатнулся, и внезапно наглый player2 беспричинно ударил в ногу противника',
+    'player1 расстроился, как вдруг, неожиданно player2 случайно влепил стопой в живот соперника.',
+    'player1 пытался что-то сказать, но вдруг, неожиданно player2 со скуки, разбил бровь сопернику.'
 ];
 let logFight=[]
-let loger=[]
-let pokemon={
-    defaultHP: 100,
-    damageHP: 100,
-    damage:0,
-    changeDamage: function(){
-        this.damage=getRandom(10,50)
-    }
+let player1={
+    ...pokemons[getRandom(0,pokemons.length-1)]
 }
-let counterClick=()=>{
-    let counter=0
-    return ()=>{
-        alert(`Осталось ${6-counter} нажатий`)
-        if(counter<6)
-            counter++
+player1.damageHP=player1.hp
+let player2={
+    ...pokemons[getRandom(0,pokemons.length-1)]
+}
+player2.damageHP=player2.hp
+pokemonRender()
+function healthRender(){
+    if(player1.damageHP<=0 ||player2.damageHP<=0){
+        if(player1.damageHP<=0)
+            alert('Player2 Выиграл')
         else
-            return 0
+            alert('Player1 Выиграл')
+        let buttons=document.querySelector('#buttons1')
+        let buttons2=document.querySelector('#buttons2')
+        let logser=document.querySelector('#logList')
+        logser.innerHTML=''
+        logFight=[]
+        buttons.innerHTML=''
+        buttons2.innerHTML=''
+        setRandomPokemon()
+        pokemonRender()
     }
-}
-let CC=counterClick()
-let Pikachu={},Charmander={}
-Object.assign(Pikachu,pokemon)
-Object.assign(Charmander,pokemon)
-Pikachu.changeDamage()
-Charmander.changeDamage()
-let healthRender=()=>{
     let barPik=document.querySelector("#progressbar-character")
     let barEn=document.querySelector("#progressbar-enemy")
     let healthPik=document.querySelector('#health-character')
     let healthEn=document.querySelector('#health-enemy')
-    barPik.style=`width: ${Pikachu.damageHP}%`
-    barEn.style=`width: ${Charmander.damageHP}%`
-    healthPik.innerHTML=`${Pikachu.damageHP} / ${Pikachu.defaultHP}`
-    healthEn.innerHTML=`${Charmander.damageHP} / ${Charmander.defaultHP}`
+    barPik.style=`width: ${(player1.damageHP / player1.hp) * 100}%`
+    barEn.style=`width: ${(player2.damageHP / player1.hp) * 100}%`
+    healthPik.innerHTML=`${player1.damageHP} / ${player1.hp}`
+    healthEn.innerHTML=`${player2.damageHP} / ${player2.hp}`
 }
-kick.onclick=()=>{
-    if(CC()===0)
-        return 0
-    Pikachu.damageHP-=Charmander.damage
-    Charmander.damageHP-=Pikachu.damage
+function pokemonRender(){
+    let player1Img=document.querySelector('#img1')
+    let player2Img=document.querySelector('#img2')
+    let player1Name=document.querySelector('#name-character')
+    let player2Name=document.querySelector('#name-enemy')
+    let buttons1=document.querySelector('#buttons1')
+    let buttons2=document.querySelector('#buttons2')
+    player1Img.src=player1.img
+    player2Img.src=player2.img
+    player1Name.innerHTML=player1.name
+    player2Name.innerHTML=player2.name
+    player1.attacks.map(el => {
+        let button=document.createElement('button')
+        button.classList.add('button')
+        button.innerHTML=el.name
+        button.onclick=()=>{
+            let dmg=getRandom(el.minDamage,el.maxDamage)
+            player2.damageHP-=dmg
+            healthRender()
+            logsRender(dmg)
+        }
+        buttons1.append(button)
+    });
+    player2.attacks.map(el => {
+        let button=document.createElement('button')
+        button.classList.add('button')
+        button.innerHTML=el.name
+        button.onclick=()=> {
+            let dmg=getRandom(el.minDamage, el.maxDamage)
+            player1.damageHP -= dmg
+            healthRender()
+            logsRender(dmg)
+        }
+        buttons2.append(button)
+    });
     healthRender()
-    logsRender(Pikachu.damage)
-    if(Pikachu.damageHP<=0 || Charmander.damageHP<=0){
-        if(Pikachu.damageHP<=0)
-            alert("Чармандер выиграл")
-        else if(Charmander.damageHP<=0)
-            alert("Пикачу выиграл")
-        else
-            alert("Ничья")
-        Pikachu.damageHP=100
-        Charmander.damageHP=100
-        Pikachu.damage=getRandom(10,50)
-        Charmander.damage=getRandom(10,50)
-        healthRender()
-        logFight=[]
-        let logR=document.querySelector('#logs')
-        logR.innerHTML=''
+}
+function setRandomPokemon(){
+    player1={}
+    player2={}
+    player1={
+        ...pokemons[getRandom(0,pokemons.length-1)]
     }
+    player1.damageHP=player1.hp
+    player2={
+        ...pokemons[getRandom(0,pokemons.length-1)]
+    }
+    player2.damageHP=player2.hp
 }
 function logsRender(damage){
-    let logR=document.querySelector('#logs')
-    logFight.push(`<p>${logs[Math.floor(Math.random() * logs.length)]}, нанеся ${damage} урона</p>`)
+    let logR=document.querySelector('#logList')
+    logFight.push(`<p>${logs[getRandom(0,logs.length)]}, нанеся ${damage} урона</p>`)
     logR.innerHTML=logFight.reverse().join('')
 }
 function getRandom(min, max){

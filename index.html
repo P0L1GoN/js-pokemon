@@ -20,7 +20,7 @@
         <div class="pokemon character">
             <span class="lvl">Lv. 1</span>
 
-            <img src="http://sify4321.000webhostapp.com/pikachu.png" class="sprite">
+            <img src="http://sify4321.000webhostapp.com/pikachu.png" class="sprite" id="img1">
 
             <div class="details">
                 <h2 class="name" id="name-character">
@@ -35,16 +35,15 @@
             </div>
         </div>
 
-        <div class="control">
-            <button class="button" id="btn-kick">
-                Thunder Jolt
-            </button>
+        <div class="control" id="buttons">
+            <div id="buttons1"></div>
+            <div id="buttons2"></div>
         </div>
 
         <div class="pokemon enemy">
             <span class="lvl">Lv. 1</span>
 
-            <img src="http://sify4321.000webhostapp.com/charmander.png" class="sprite">
+            <img src="http://sify4321.000webhostapp.com/charmander.png" class="sprite" id="img2">
 
             <div class="details">
                 <h2 class="name" id="name-enemy">
@@ -59,10 +58,10 @@
             </div>
         </div>
     </div>
-    <div id="logs"></div>
+    <div id="logList"></div>
 </div>
 <div class="catch_screen"></div>
 
-<script src="main.js"></script>
+<script type="module" src="main.js"></script>
 </body>
 </html>

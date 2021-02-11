@@ -36,14 +36,19 @@ body {
 
 .control {
     width: 320px;
-    height: 260px;
     position: relative;
     margin: 20px;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
-
+.control>div{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
 .playground {
     max-width: 1024px;
     display: flex;
@@ -77,8 +82,8 @@ body {
 .pokes {
     display: -webkit-box;
     display: flex;
-    -webkit-box-flex: wrap;
-    flex: wrap;
+    -webkit-box-flex-wrap: wrap;
+    flex-wrap: wrap;
     width: 100%;
     -webkit-box-pack: center;
     justify-content: center;
